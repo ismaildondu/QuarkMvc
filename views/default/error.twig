@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quark Error</title>
+</head>
+<body>
+
+<div id="errorContent">
+    <div class="card">
+        <div class="card-body">
+            <h1>QuarkMVC {{ title }}</h1>
+            <p>{{ content }}</p>
+        </div>
+    </div>
+</div>
+</body>
+<style>
+    body{
+        padding: 0;
+        margin: 0;
+        background-color: #000;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    #errorContent{
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+    .card{
+        background-color: rgba(255, 0, 0, 0.623);
+        border-radius: 10px;
+        padding: 20px;
+        color: #fff;
+        width: 500px;
+    }
+</style>
+</html>

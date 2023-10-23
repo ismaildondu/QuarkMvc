@@ -1,0 +1,16 @@
+{
+    "name": "ismailfp/quark-mvc",
+    "autoload": {
+        "psr-4": {
+            "QuarkMvc\\": "./"
+        }
+    },
+    "authors": [
+        {
+            "name": "İsmail Döndü"
+        }
+    ],
+    "require": {
+        "twig/twig": "^3.7"
+    }
+}

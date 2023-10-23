@@ -1,0 +1,26 @@
+<?php
+namespace QuarkMvc\controllers;
+use QuarkMvc\app\Request;
+use QuarkMvc\app\SecurityHelper;
+class @controller_name@ implements IController
+{
+    public function index(array $params): void
+    {
+        //$csrf=SecurityHelper::generateToken();
+        $this->render('@controller_view@',["var"=>"@controller_name@"]);
+    }
+    public function render(string $view, array $params = [],int $statusCode=200): void
+    {
+        \QuarkMvc\app\Render::render($view, $params,$statusCode);
+        die();
+    }
+
+    public function before(array $params): void
+    {
+
+    }
+    public function after(array $params): void
+    {
+
+    }
+}
