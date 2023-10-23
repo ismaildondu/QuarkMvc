@@ -251,11 +251,11 @@ Validation rules:
         echo(json_encode($errors));
 ```
 If there are no errors, it returns an empty array.
-```json
+```php
 []
 ```
 But if there are errors, it returns an array of errors.
-```json
+```php
 [
   ["username"]=>[
     "This field is required",
