@@ -1,6 +1,9 @@
 # QuarkMVC
 QuarkMVC is a simple MVC framework for PHP. Firstly it was created for my own school project, but now it's available for everyone.
 It's not a perfect framework, but it's simple and easy to use for my school project.
+## Requirements
+- PHP 8.0 or higher
+- Composer
 ## Features
 - Simple and easy to use
 - Easy to create new controllers
