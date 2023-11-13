@@ -130,6 +130,11 @@ $quark = new Quark();
 $quark->routes->setRoute('', 'index',"GET"); 
 ```
 
+### Debug Mode
+```php
+$quark = new Quark(true);
+```
+If you want to use debug mode, you must to set true in Quark class constructor.
 
 ### Middleware
 Middleware are located in `app/middleware` folder. If you use this framework and you want to create a new middleware:

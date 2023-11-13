@@ -1,0 +1,31 @@
+
+<style>
+.debug-top{
+    padding: 10px;
+    background: #c92a2a;
+    color: #fff;
+    position: sticky;
+    top: 0;
+    z-index: 9999;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+}
+code{
+    font-size: 12px;
+    font-weight: 600;
+    background: #fff;
+    padding: 5px;
+    border-radius: 5px;
+    color: #c92a2a;
+}
+</style>
+
+<div class="debug-top">
+    <h1>DEBUG MODE ACTIVATED</h1>
+    <code>
+        Active Path {{ activePath }} | Active Method {{ activeMethod }} | Is Path Found {{ isPathFound }} |
+        Params Value {{ params }} | Active Method {{ activeMethod }} | Is Path Found {{ isPathFound }} | Get Method {{ get }} | Post Method {{ post }}
+    </code>
+</div>

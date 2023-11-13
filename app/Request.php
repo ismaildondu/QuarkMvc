@@ -19,7 +19,6 @@ class Request
     {
         return strtoupper($_SERVER['REQUEST_METHOD']);
     }
-
     public static function endStatus(int $code): void
     {
         http_response_code($code);

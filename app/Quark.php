@@ -9,9 +9,11 @@ class Quark
     public Routes $routes;
     public Request $request;
     public static Environment $render;
+    public static bool $isDebug;
     public static string $SUPER_DIR;
-    public function __construct()
+    public function __construct($isDebug=false)
     {
+        self::$isDebug = $isDebug;
         $this->nativeErrorManager();
         self::$SUPER_DIR = dirname(__DIR__);
         $this->routes = new Routes();

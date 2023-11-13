@@ -22,7 +22,6 @@ class Routes
     }
     public function setRoute(string $route, string $controller,string $type): void
     {
-
         $type = strtoupper($type);
         $this->checkRouteType($type);
         $route=$this->routeSetRule($route);
@@ -34,11 +33,9 @@ class Routes
     {
         $this->routes['404'] = $controller;
     }
-    public function executeRoute():void{
+    public function executeRoute($isSearch=false):void{
       $path=$this->request->currentPath();
-      if(str_ends_with($path, "/")) {
-          $path = substr($path, 0, -1);
-      }
+      $path=$this->stringEndsWithPath($path);
       $method=$this->request->method();
       foreach($this->routes[$method] as $route=>$callBack){
           if(preg_match("@^$route$@",$path,$matches)){
@@ -69,21 +66,50 @@ class Routes
             return;
         }
     }
+    private function stringEndsWithPath(string $path): string
+    {
+        if(str_ends_with($path, "/")) {
+            $path = substr($path, 0, -1);
+        }
+        return $path;
+    }
+    private function searchRoute($path,$method):bool{
+        $path=$this->stringEndsWithPath($path);
+        foreach($this->routes[$method] as $route=>$callBack){
+            if(preg_match("@^$route$@",$path,$matches)){
+                return true;
+            }
+        }
+        return false;
+    }
 
     private function renderArray(array $params=[]): array
     {
         $return=[
-            "PATH"=>$_SERVER['REQUEST_URI'] ?? '/',
+            "PATH"=>$this->request->currentPath(),
             "PARAMS"=>$params,
         ];
+            $return["METHOD"]=$this->request->method();
             $return["GET"]=$_GET;
             $return["POST"]=$_POST;
             $return["COOKIES"]=$_COOKIE;
             $return["FILES"]=$_FILES;
             $return["SERVER"]=$_SERVER;
             $return["REQUEST"]=$_REQUEST;
+            $return["IS_ROUTE_FOUND"]=$this->searchRoute($return["PATH"],$return["METHOD"]);
+            if(Quark::$isDebug){
+                Render::render("default/debugger", [
+                    "activePath" => $return["PATH"],
+                    "activeMethod" => $return["METHOD"],
+                    "isPathFound" => $return["IS_ROUTE_FOUND"],
+                    "params" => json_encode($return["PARAMS"], JSON_PRETTY_PRINT),
+                    "get" => json_encode($return["GET"], JSON_PRETTY_PRINT),
+                    "post" => json_encode($return["POST"], JSON_PRETTY_PRINT),
+                ], 404);
+            }
         return $return;
     }
+
 
     private function executeController(string $controllerName, array $params): void
     {
