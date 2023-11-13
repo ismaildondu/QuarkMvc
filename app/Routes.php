@@ -43,12 +43,12 @@ class Routes
       foreach($this->routes[$method] as $route=>$callBack){
           if(preg_match("@^$route$@",$path,$matches)){
               if(count($matches)==1){
-                  $this->executeController($callBack,$this->renderArray($_GET,[],$_POST,$_COOKIE,$_FILES,$_SERVER,$_REQUEST));
+                  $this->executeController($callBack,$this->renderArray());
                   return;
               }
               if(count($matches)==2){
                   $params=explode(",",$matches[1]);
-                  $this->executeController($callBack,$this->renderArray($_GET,$params,$_POST,$_COOKIE,$_FILES,$_SERVER,$_REQUEST));
+                  $this->executeController($callBack,$this->renderArray($params));
                   return;
               }
               if(count($matches)>2){
@@ -56,7 +56,7 @@ class Routes
                   for($i=1;$i<count($matches);$i++){
                       $params[]=$matches[$i];
                   }
-                  $this->executeController($callBack,$this->renderArray($_GET,$params,$_POST,$_COOKIE,$_FILES,$_SERVER,$_REQUEST));
+                  $this->executeController($callBack,$this->renderArray($params));
                   return;
               }
           }
@@ -70,30 +70,18 @@ class Routes
         }
     }
 
-    private function renderArray(array $get=[],array $params=[],array $post=[],array $cookies=[],array $files=[],array $server=[],array $req=[]): array
+    private function renderArray(array $params=[]): array
     {
         $return=[
             "PATH"=>$_SERVER['REQUEST_URI'] ?? '/',
             "PARAMS"=>$params,
         ];
-        if(count($get)>0){
-            $return["GET"]=$get;
-        }
-        if(count($post)>0){
-            $return["POST"]=$post;
-        }
-        if(count($cookies)>0){
-            $return["COOKIES"]=$cookies;
-        }
-        if(count($files)>0){
-            $return["FILES"]=$files;
-        }
-        if(count($server)>0){
-            $return["SERVER"]=$server;
-        }
-        if(count($req)>0){
-            $return["REQUEST"]=$req;
-        }
+            $return["GET"]=$_GET;
+            $return["POST"]=$_POST;
+            $return["COOKIES"]=$_COOKIE;
+            $return["FILES"]=$_FILES;
+            $return["SERVER"]=$_SERVER;
+            $return["REQUEST"]=$_REQUEST;
         return $return;
     }
 
@@ -164,7 +152,6 @@ class Routes
             return;
         }
     }
-
     private function routeSetRule(string $route): string
     {
         if($route=="/"){
@@ -175,8 +162,4 @@ class Routes
         }
         return $route;
     }
-
-
-
-
 }
