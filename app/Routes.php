@@ -25,9 +25,7 @@ class Routes
 
         $type = strtoupper($type);
         $this->checkRouteType($type);
-        if ($route[0] !== '/') {
-            $route = '/' . $route;
-        }
+        $route=$this->routeSetRule($route);
         $route=str_replace(':params','([a-zA-Z0-9\-_]+)',$route);
         $this->routes[$type][$route] = $controller;
     }
@@ -148,9 +146,7 @@ class Routes
     {
         $type = strtoupper($type);
         $this->checkRouteType($type);
-        if ($route[0] !== '/') {
-            $route = '/' . $route;
-        }
+        $route=$this->routeSetRule($route);
         $plainRoute=$route;
         $route=str_replace(':params','([a-zA-Z0-9\-_]+)',$route);
         if(!isset($this->routes[$type][$route])){
@@ -169,6 +165,16 @@ class Routes
         }
     }
 
+    private function routeSetRule(string $route): string
+    {
+        if($route=="/"){
+            return "";
+        }
+        if ($route!=""&&$route[0] !== '/') {
+            return '/' . $route;
+        }
+        return $route;
+    }
 
 
 
