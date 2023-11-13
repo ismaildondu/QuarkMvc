@@ -1,9 +1,6 @@
 <?php
 
 namespace QuarkMvc\app;
-
-use QuarkMvc\app\localizor\Localizor;
-
 class Routes
 {
     public static array $routesTypes = [
@@ -25,6 +22,7 @@ class Routes
     }
     public function setRoute(string $route, string $controller,string $type): void
     {
+
         $type = strtoupper($type);
         $this->checkRouteType($type);
         if ($route[0] !== '/') {
@@ -40,6 +38,9 @@ class Routes
     }
     public function executeRoute():void{
       $path=$this->request->currentPath();
+      if(str_ends_with($path, "/")) {
+          $path = substr($path, 0, -1);
+      }
       $method=$this->request->method();
       foreach($this->routes[$method] as $route=>$callBack){
           if(preg_match("@^$route$@",$path,$matches)){
