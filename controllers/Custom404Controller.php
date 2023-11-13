@@ -7,7 +7,7 @@ class Custom404Controller implements IController
 {
         public function index(array $params): void
         {
-            echo("test");
+            $this->render('404',["path"=>$params["PATH"]]);
         }
         public function render(string $view, array $params = [],int $statusCode=200): void
         {
