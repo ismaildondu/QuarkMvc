@@ -119,6 +119,18 @@ $quark->routes->setRoute('register', 'RegisterController',"pOst"); //valid
 $quark->routes->setRoute('register', 'RegisterController',"poost"); // invalid
 ```
 
+How to set default route:
+```php   
+$quark = new Quark();
+$quark->routes->setRoute('/', 'index',"GET"); 
+```
+or
+```php
+$quark = new Quark();
+$quark->routes->setRoute('', 'index',"GET"); 
+```
+
+
 ### Middleware
 Middleware are located in `app/middleware` folder. If you use this framework and you want to create a new middleware:
 1. Go to `app/middleware` folder
