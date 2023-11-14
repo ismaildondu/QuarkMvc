@@ -18,7 +18,9 @@ class Error
         "MiddlewareNotFound"=>"Middleware not found:",
         "Exception"=>"Exception:",
         "CustomErrorMessageKeyNotValid"=>"Custom error message key not valid:",
-        "QuarkLocalizorError"=>"Localizor error:"
+        "QuarkLocalizorError"=>"Localizor error:",
+        "Environment key not found"=>"Environment key not found in .env file",
+        "Environment file not found"=>".env file not found in root directory"
     ];
     private static array $errorCodes=[
         "IControllerImplementationError"=>500,
@@ -34,7 +36,9 @@ class Error
         "MiddlewareNotFound"=>500,
         "Exception"=>500,
         "CustomErrorMessageKeyNotValid"=>500,
-        "QuarkLocalizorError"=>500
+        "QuarkLocalizorError"=>500,
+        "Environment key not found"=>500,
+        "Environment file not found"=>404
 
     ];
 

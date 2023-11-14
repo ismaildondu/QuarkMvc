@@ -129,6 +129,21 @@ or
 $quark = new Quark();
 $quark->routes->setRoute('', 'index',"GET"); 
 ```
+### Environment Variables
+Environment variables are located in `.env` file. If you want to use environment variables, you must to create a new file `.env` in root folder. You can use environment variables like this:
+```
+.env file
+
+SIMPLE_KEY=123456789
+```
+```php
+// Anywhere in your application
+
+use QuarkMvc\app\Environment;
+$key=Environment::get("SIMPLE_KEY");
+```
+
+
 
 ### Debug Mode
 ```php
