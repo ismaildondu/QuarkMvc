@@ -19,8 +19,9 @@ class Error
         "Exception"=>"Exception:",
         "CustomErrorMessageKeyNotValid"=>"Custom error message key not valid:",
         "QuarkLocalizorError"=>"Localizor error:",
-        "Environment key not found"=>"Environment key not found in .env file",
-        "Environment file not found"=>".env file not found in root directory"
+        "EnvironmentKeyNotFound"=>"Environment key not found in .env file",
+        "EnvironmentFileNotFound"=>".env file not found in root directory",
+        "EnvironmentPermission"=>".env file found. But can not open, check permissions"
     ];
     private static array $errorCodes=[
         "IControllerImplementationError"=>500,
@@ -37,8 +38,9 @@ class Error
         "Exception"=>500,
         "CustomErrorMessageKeyNotValid"=>500,
         "QuarkLocalizorError"=>500,
-        "Environment key not found"=>500,
-        "Environment file not found"=>404
+        "EnvironmentKeyNotFound"=>500,
+        "EnvironmentFileNotFound"=>404,
+        "EnvironmentPermission"=>500
 
     ];
 

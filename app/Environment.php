@@ -7,6 +7,9 @@ class Environment
     public static function get(string $key): string
     {
         $path=Quark::$SUPER_DIR."\.env";
+        if (!file_exists($path)) {
+            Error::renderError("EnvironmentFileNotFound");
+        }
         $file = fopen($path, "r");
         if ($file) {
             $parse = [];
@@ -18,10 +21,10 @@ class Environment
             if (array_key_exists($key, $parse)) {
                 return $parse[$key];
             } else {
-                Error::renderError("Environment key not found","key=>".$key);
+                Error::renderError("EnvironmentKeyNotFound","key=>".$key);
             }
         } else {
-            Error::renderError("Environment file not found");
+            Error::renderError("EnvironmentPermission");
         }
         return "";
     }
