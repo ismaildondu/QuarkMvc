@@ -140,16 +140,20 @@ SIMPLE_KEY=123456789
 // Anywhere in your application
 
 use QuarkMvc\app\Environment;
-$key=Environment::get("SIMPLE_KEY");
+$key = Environment::get("SIMPLE_KEY");
 ```
 
 
 
 ### Debug Mode
 ```php
-$quark = new Quark(true);
+$quark = new Quark();
+...
+$quark->debugMode();
+$quark->run();
+
 ```
-If you want to use debug mode, you must to set true in Quark class constructor.
+If you want to use debug mode, you must to call debugMode() method before run() method. Debug mode is disabled by default.
 
 ### Middleware
 Middleware are located in `app/middleware` folder. If you use this framework and you want to create a new middleware:
