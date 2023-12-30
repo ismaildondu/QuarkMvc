@@ -33,39 +33,41 @@ class Routes
     {
         $this->routes['404'] = $controller;
     }
-    public function executeRoute($isSearch=false):void{
-      $path=$this->request->currentPath();
-      $path=$this->stringEndsWithPath($path);
-      $method=$this->request->method();
-      foreach($this->routes[$method] as $route=>$callBack){
-          if(preg_match("@^$route$@",$path,$matches)){
-              if(count($matches)==1){
-                  $this->executeController($callBack,$this->renderArray());
-                  return;
-              }
-              if(count($matches)==2){
-                  $params=explode(",",$matches[1]);
-                  $this->executeController($callBack,$this->renderArray($params));
-                  return;
-              }
-              if(count($matches)>2){
-                  $params=[];
-                  for($i=1;$i<count($matches);$i++){
-                      $params[]=$matches[$i];
-                  }
-                  $this->executeController($callBack,$this->renderArray($params));
-                  return;
-              }
-          }
-      }
-        if(isset($this->routes[404])){
-            $this->executeController($this->routes[404],$this->renderArray());
+    public function executeRoute($isSearch = false): void
+    {
+        $matchedRoute = $this->getMatchedRoute();
+        if($matchedRoute){
+            $this->executeController($matchedRoute["callBack"],$this->renderArray($matchedRoute["params"]));
             return;
         }else{
-            Error::renderError("Default404Error");
-            return;
+            $this->handle404();
         }
     }
+    private function getMatchedRoute():?array{
+        $path = $this->stringEndsWithPath($this->request->currentPath());
+        $method = $this->request->method();
+        $path = $this->stringEndsWithPath($path);
+
+        foreach($this->routes[$method] as $route=>$callBack){
+            if(preg_match("@^$route$@",$path,$matches)){
+                return [
+                    "route"=>$route,
+                    "callBack"=>$callBack,
+                    "params"=>array_slice($matches, 1)
+                ];
+            }
+        }
+        return null;
+    }
+    private function handle404(): void
+    {
+        if(isset($this->routes[404])){
+            $this->executeController($this->routes[404],$this->renderArray());
+        }else{
+            Error::renderError("Default404Error");
+        }
+    }
+    // ref: routeSetRule() in app/Routes.php for stringEndsWithPath()
     private function stringEndsWithPath(string $path): string
     {
         if(str_ends_with($path, "/")) {
@@ -89,24 +91,24 @@ class Routes
             "PATH"=>$this->request->currentPath(),
             "PARAMS"=>$params,
         ];
-            $return["METHOD"]=$this->request->method();
-            $return["GET"]=$_GET;
-            $return["POST"]=$_POST;
-            $return["COOKIES"]=$_COOKIE;
-            $return["FILES"]=$_FILES;
-            $return["SERVER"]=$_SERVER;
-            $return["REQUEST"]=$_REQUEST;
-            $return["IS_ROUTE_FOUND"]=$this->searchRoute($return["PATH"],$return["METHOD"]);
-            if(Quark::$isDebug){
-                Render::render("default/debugger", [
-                    "activePath" => $return["PATH"],
-                    "activeMethod" => $return["METHOD"],
-                    "isPathFound" => $return["IS_ROUTE_FOUND"],
-                    "params" => json_encode($return["PARAMS"], JSON_PRETTY_PRINT),
-                    "get" => json_encode($return["GET"], JSON_PRETTY_PRINT),
-                    "post" => json_encode($return["POST"], JSON_PRETTY_PRINT),
-                ], 404);
-            }
+        $return["METHOD"]=$this->request->method();
+        $return["GET"]=$_GET;
+        $return["POST"]=$_POST;
+        $return["COOKIES"]=$_COOKIE;
+        $return["FILES"]=$_FILES;
+        $return["SERVER"]=$_SERVER;
+        $return["REQUEST"]=$_REQUEST;
+        $return["IS_ROUTE_FOUND"]=$this->searchRoute($return["PATH"],$return["METHOD"]);
+        if(Quark::$isDebug){
+            Render::render("default/debugger", [
+                "activePath" => $return["PATH"],
+                "activeMethod" => $return["METHOD"],
+                "isPathFound" => $return["IS_ROUTE_FOUND"],
+                "params" => json_encode($return["PARAMS"], JSON_PRETTY_PRINT),
+                "get" => json_encode($return["GET"], JSON_PRETTY_PRINT),
+                "post" => json_encode($return["POST"], JSON_PRETTY_PRINT),
+            ], 404);
+        }
         return $return;
     }
 
@@ -130,7 +132,7 @@ class Routes
         session_name("QUARK_SESSION_ID");
         session_start();
         foreach($middleware as $route=>$middlewares){
-            if(preg_match("@^$route$@",$params["PATH"],$matches)){
+            if(preg_match("@^$route$@",$params["PATH"])){
                 foreach($middlewares as $middleware){
                     $middlewareName="QuarkMvc\\middlewares\\".$middleware;
                     $instance="QuarkMvc\\middlewares\\IMiddleware";
@@ -156,6 +158,8 @@ class Routes
         ob_end_flush();
 
     }
+
+
     public function addMiddleware(string $route, string $middleware,string $type): void
     {
         $type = strtoupper($type);
@@ -183,7 +187,7 @@ class Routes
         if($route=="/"){
             return "";
         }
-        if ($route!=""&&$route[0] !== '/') {
+        if ($route!="" && $route[0] !== '/') {
             return '/' . $route;
         }
         return $route;
